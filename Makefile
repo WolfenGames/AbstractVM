@@ -1,6 +1,6 @@
 NAME = "AbstractVM"
 
-CFLAGS += -Wextra -Wall -Werror  -O3
+CFLAGS += -Wextra -Wall -Werror -O3
 
 C = clang++
 
@@ -15,7 +15,7 @@ HDRS  = $(addprefix $(DIR_H)/,$(HEADERS))
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 OBJECTS = $(addprefix $(DIR_O)/,$(SOURCES:.cpp=.o))
 
-$(DIR_O)/%.o:		$(DIR_S)/%.cpp $(DIR_H)/$(HEADERS)
+$(DIR_O)/%.o:		$(DIR_S)/%.cpp $(HDRS)
 	@echo "\033[1;35;m[Compiling $<] \t\033[0m"
 	@$(C) $(CFLAGS) -c -o $@ $<
 

@@ -12,13 +12,17 @@
 
 #include <iostream>
 #include <string>
+#include "IOperand.hpp"
+#include "Operand.hpp"
+#include "Factory.hpp"
 
 int		main(void)
 {
+	Factory			OperandFactory;
 	while (true)
 	{
-		std::string input;
-		getline(std::cin, input);
+		std::string	input;
+		std::getline(std::cin, input);
 	};
 	return 0;
 }

@@ -14,7 +14,7 @@
 # define PARSER_HPP
 
 #include <list>
-#include "IOperand.hpp"
+#include "Operand.hpp"
 
 class Parser
 {
