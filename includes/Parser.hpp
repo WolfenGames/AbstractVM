@@ -10,33 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_HPP
-# define PARSER_HPP
+#pragma once
 
 #include <list>
+#include <vector>
 #include "Operand.hpp"
+#include "IOperand.hpp"
 
 class Parser
 {
+	typedef std::vector<const IOperand*> stackType;
 	public:
 		Parser(void);
 		Parser(const Parser&);
 		const Parser& operator=(const Parser&);
-		Parser(std::list<void>&);
-		void	push(void);
-		void	pop(void);
-		void	dump(void);
-		void	assert(void);
-		void	add(void);
-		void	sub(void);
-		void	mul(void);
-		void	div(void);
-		void	mod(void);
-		void	print(void);
-		void	end(void);
+		Parser(stackType&);
+		void	Push(void);
+		void	Pop(void);
+		void	Dump(void);
+		void	Assert(void);
+		void	Add(void);
+		void	Sub(void);
+		void	Mul(void);
+		void	Div(void);
+		void	Mod(void);
+		void	Print(void);
+		void	End(void);
 		~Parser(void);
 	private:
-		std::list<void>	stack;
+		stackType m_stack;
 };
-
-#endif

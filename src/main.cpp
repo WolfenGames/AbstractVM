@@ -12,8 +12,6 @@
 
 #include <iostream>
 #include <string>
-#include "IOperand.hpp"
-#include "Operand.hpp"
 #include "Factory.hpp"
 
 int		main(void)
