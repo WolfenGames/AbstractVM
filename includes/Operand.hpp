@@ -12,6 +12,7 @@
 
 #include "eOperand.hpp"
 #include "Factory.hpp"
+#include <iostream>
 #include <sstream>
 #include <cmath>
 #include <string>
@@ -44,6 +45,9 @@ inline eOperandType getDataType<float>() { return eOperandType::FLOAT; }
 
 template <>
 inline eOperandType getDataType<double>() { return eOperandType::DOUBLE; }
+
+#define DivByZero "Tried to Divide by 0 :("
+#define ModByZero "Tried to Mod by 0 :("
 
 template<typename T>
 class Operand: public IOperand
@@ -124,11 +128,12 @@ class Operand: public IOperand
 		}
 		virtual IOperand const *operator*(IOperand const& rhs) const
 		{
+			std::string v;
+			eOperandType t = rhs.getType() > getType() ? rhs.getType() : getType();
+			Factory		f;
 			Operand<T> temp(rhs.toString());
 			T tVal = temp.val * this->val;
-			Operand<T> *ret = new Operand<T>;
-			ret->val = tVal;
-			return ret;
+			return f.getOperator(t, std::to_string(tVal));
 		}
 		virtual IOperand const *operator/(IOperand const& rhs) const
 		{
@@ -144,17 +149,17 @@ class Operand: public IOperand
 				case eOperandType::INT16:
 				case eOperandType::INT8:
 					if (op1 == 0)
-						throw;
+						throw std::invalid_argument(DivByZero);
 					v = std::to_string(this->val / op1);
 					break;
 				case eOperandType::FLOAT:
 					if (op2 == 0)
-						throw;
+						throw std::invalid_argument(DivByZero);
 					v = std::to_string(this->val / op2);
 					break;
 				case eOperandType::DOUBLE:
 					if (op3 == 0)
-						throw;
+						throw std::invalid_argument(DivByZero);
 					v = std::to_string(this->val / op3);
 					break;
 				default:
@@ -177,17 +182,17 @@ class Operand: public IOperand
 				case eOperandType::INT16:
 				case eOperandType::INT8:
 					if (op1 == 0)
-						throw;
+						throw std::invalid_argument(ModByZero);
 					v = std::to_string(mod<int32_t>(this->val, op1));
 					break;
 				case eOperandType::FLOAT:
 					if (op2 == 0)
-						throw;
+						throw std::invalid_argument(ModByZero);
 					v = std::to_string(mod<float>(this->val, op2));
 					break;
 				case eOperandType::DOUBLE:
 					if (op3 == 0)
-						throw;
+						throw std::invalid_argument(ModByZero);
 					v = std::to_string(mod<double>(this->val, op3));
 					break;
 				default:

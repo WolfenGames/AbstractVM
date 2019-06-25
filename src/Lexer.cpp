@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Lexer.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/25 10:33:26 by jwolf             #+#    #+#             */
-/*   Updated: 2019/06/25 10:33:26 by jwolf            ###   ########.fr       */
+/*   Created: 2019/06/25 14:27:24 by jwolf             #+#    #+#             */
+/*   Updated: 2019/06/25 14:27:24 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Lexer.hpp"
 #include <iostream>
-#include "Factory.hpp"
+#include <istream>
 
-int		main(void)
+Lexer::Lexer(void){}
+Lexer::Lexer(std::string const& s, size_t line):
+	Command(eCommand::NONE), index(1), line(line), val(nullptr)
 {
-	Factory f;
-	try
-	{
-		IOperand const *x = f.getOperator(eOperandType::INT16, "12");
-		IOperand const *y = f.getOperator(eOperandType::INT16, "0");
-		IOperand const *z = *x / *y;
-		std::cout << z->toString() << std::endl;
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	
-	return 0;
-}
+
+};
+Lexer::Lexer(const Lexer& rhs) { *this = rhs; }
+Lexer	&Lexer::operator=(const Lexer& rhs) { if (this != &rhs) *this = rhs; return *this;}
+Lexer::~Lexer(void){};
