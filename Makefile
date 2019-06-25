@@ -9,13 +9,13 @@ DIR_H = ./includes
 DIR_O = obj
 
 SOURCES = main.cpp Factory.cpp
-HEADERS = Factory.hpp IOperand.hpp Operand.hpp Parser.hpp
+HEADERS = Factory.hpp IOperand.hpp eOperand.hpp Operand.hpp
 
 HDRS  = $(addprefix $(DIR_H)/,$(HEADERS))
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 OBJECTS = $(addprefix $(DIR_O)/,$(SOURCES:.cpp=.o))
 
-$(DIR_O)/%.o:		$(DIR_S)/%.cpp
+$(DIR_O)/%.o:		$(DIR_S)/%.cpp $(HDRS)
 	@echo "\033[1;35;m[Compiling $<] \t\033[0m"
 	@$(C) $(CFLAGS) -c -o $@ $< -I $(DIR_H)
 

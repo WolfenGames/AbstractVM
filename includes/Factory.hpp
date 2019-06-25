@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/20 14:04:20 by jwolf             #+#    #+#             */
-/*   Updated: 2019/06/24 16:23:55 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/06/24 20:05:24 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,19 @@ class Factory
 	private:
 		
 	public:
-		static creator_t CreatorFunctions[];
 		
 		Factory(void);
+		Factory(const Factory&);
 		~Factory(void);
-		IOperand const	*getOperator(eOperandType, std::string) const;
 		Factory			&operator=(const Factory&);
 		
+		IOperand const	*getOperator(eOperandType, std::string) const;
+	
+	private:
+		static creator_t CreatorFunctions[];
 		IOperand const	*CreateINT8(const std::string&) const;
 		IOperand const	*CreateINT16(const std::string&) const;
 		IOperand const	*CreateINT32(const std::string&) const;
 		IOperand const	*CreateFLOAT(const std::string&) const;
-		IOperand const	*CreateDOUBLE(const std::string&) const;
+		IOperand const	*CreateDOUBLE(const std::string&) const;	
 };
