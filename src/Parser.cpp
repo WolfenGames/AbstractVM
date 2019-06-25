@@ -141,13 +141,13 @@ void	Parser::Assert(Lexer &l)
 		throw std::exception("Stack is too small :(");
 	IOperand const *v = l.getValue();
 	auto v1 = std::stod(v->toString());
-	auto v2 = std::stod(stack.back);
+	auto v2 = std::stod(stack.back()->toString());
 	bool ass = v1 == v2;
 	delete v;
 	if (!ass)
 		throw std::exception("Assert failed :(");
 }
-void	Parser::Execute(Lexer &l)
+void	Parser::Exit(Lexer &l)
 {
 	static_cast<void>(l);
 }

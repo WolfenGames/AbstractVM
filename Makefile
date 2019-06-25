@@ -8,8 +8,8 @@ DIR_S = ./src
 DIR_H = ./includes
 DIR_O = obj
 
-SOURCES = main.cpp Factory.cpp
-HEADERS = Factory.hpp IOperand.hpp eOperand.hpp Operand.hpp
+SOURCES = main.cpp Factory.cpp Parser.cpp Lexer.cpp
+HEADERS = Factory.hpp IOperand.hpp eOperand.hpp Operand.hpp Parser.hpp Lexer.hpp
 
 HDRS  = $(addprefix $(DIR_H)/,$(HEADERS))
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
