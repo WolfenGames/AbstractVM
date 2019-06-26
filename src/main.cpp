@@ -15,21 +15,25 @@
 #include "Parser.hpp"
 #include "Lexer.hpp"
 #include "Exceptions.hpp"
+#include <fstream>
 
-int		main(void)
+int		main(int ac, char *av[])
 {
-	Factory f;
-	try
+	if (ac < 2)
 	{
-		IOperand const *x = f.getOperator(eOperandType::INT16, "12");
-		IOperand const *y = f.getOperator(eOperandType::INT16, "0");
-		IOperand const *z = *x % *y;
-		std::cout << z->toString() << std::endl;
+		Parser p;
+		p.Run();
 	}
-	catch(const std::exception& e)
+	else
 	{
-		std::cerr << e.what() << '\n';
+		std::ifstream s(av[1]);
+		if (!s)
+		{
+			std::cout << "Invalid Input shit" << std::endl;
+			return 0;
+		}
+		Parser p(s);
+		p.Run();
 	}
-	
 	return 0;
 }

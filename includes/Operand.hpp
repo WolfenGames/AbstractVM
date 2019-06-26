@@ -68,7 +68,7 @@ class Operand: public IOperand
 				case eOperandType::INT8:
 					this->val = static_cast<int32_t>(temp);
 					if (static_cast<int32_t>(this->val) != temp)
-						throw OutOfRange((temp > this->val) ? "Overflow :(" : "Underflow :(");
+						throw Exceptions::OutOfRange((temp > this->val) ? "Overflow :(" : "Underflow :(");
 					break;
 				case eOperandType::FLOAT:
 					this->val = std::stof(value);
@@ -158,17 +158,17 @@ class Operand: public IOperand
 				case eOperandType::INT16:
 				case eOperandType::INT8:
 					if (op1 == 0)
-						throw DivByZero();
+						throw Exceptions::DivByZero();
 					v = std::to_string(this->val / op1);
 					break;
 				case eOperandType::FLOAT:
 					if (op2 == 0)
-						throw DivByZero();
+						throw Exceptions::DivByZero();
 					v = std::to_string(this->val / op2);
 					break;
 				case eOperandType::DOUBLE:
 					if (op3 == 0)
-						throw DivByZero();
+						throw Exceptions::DivByZero();
 					v = std::to_string(this->val / op3);
 					break;
 				default:
@@ -190,17 +190,17 @@ class Operand: public IOperand
 				case eOperandType::INT16:
 				case eOperandType::INT8:
 					if (op1 == 0)
-						throw ModByZero();
+						throw Exceptions::ModByZero();
 					v = std::to_string(mod<int32_t>(this->val, op1));
 					break;
 				case eOperandType::FLOAT:
 					if (op2 == 0)
-						throw ModByZero();
+						throw Exceptions::ModByZero();
 					v = std::to_string(mod<float>(this->val, op2));
 					break;
 				case eOperandType::DOUBLE:
 					if (op3 == 0)
-						throw ModByZero();
+						throw Exceptions::ModByZero();
 					v = std::to_string(mod<double>(this->val, op3));
 					break;
 				default:

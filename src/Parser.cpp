@@ -44,7 +44,7 @@ void	Parser::Pop(Lexer &l)
 {
 	static_cast<void>(l);
 	if (this->stack.size() < 1)
-		throw EmptyStack();
+		throw Exceptions::EmptyStack();
 	delete this->stack.back();
 	this->stack.pop_back();
 }
@@ -52,7 +52,7 @@ void	Parser::Print(Lexer &l)
 {
 	static_cast<void>(l);
 	if (this->stack.size() < 1)
-		throw EmptyStack();
+		throw Exceptions::EmptyStack();
 	std::cout << this->stack.back()->toString() << std::endl;
 }
 void	Parser::Dump(Lexer &l)
@@ -67,7 +67,7 @@ void	Parser::Add(Lexer &l)
 	IOperand const *v1;
 	IOperand const *v2;
 	if (this->stack.size() < 2)
-		throw StackToSmall();
+		throw Exceptions::StackToSmall();
 	v1 = this->stack.back();
 	this->stack.pop_back();
 	v2 = this->stack.back();
@@ -82,7 +82,7 @@ void	Parser::Sub(Lexer &l)
 	IOperand const *v1;
 	IOperand const *v2;
 	if (this->stack.size() < 2)
-		throw StackToSmall();
+		throw Exceptions::StackToSmall();
 	v1 = this->stack.back();
 	this->stack.pop_back();
 	v2 = this->stack.back();
@@ -97,7 +97,7 @@ void	Parser::Mul(Lexer &l)
 	IOperand const *v1;
 	IOperand const *v2;
 	if (this->stack.size() < 2)
-		throw StackToSmall();
+		throw Exceptions::StackToSmall();
 	v1 = this->stack.back();
 	this->stack.pop_back();
 	v2 = this->stack.back();
@@ -112,7 +112,7 @@ void	Parser::Div(Lexer &l)
 	IOperand const *v1;
 	IOperand const *v2;
 	if (this->stack.size() < 2)
-		throw StackToSmall();
+		throw Exceptions::StackToSmall();
 	v1 = this->stack.back();
 	this->stack.pop_back();
 	v2 = this->stack.back();
@@ -127,7 +127,7 @@ void	Parser::Mod(Lexer &l)
 	IOperand const *v1;
 	IOperand const *v2;
 	if (this->stack.size() < 2)
-		throw StackToSmall();
+		throw Exceptions::StackToSmall();
 	v1 = this->stack.back();
 	this->stack.pop_back();
 	v2 = this->stack.back();
@@ -139,14 +139,14 @@ void	Parser::Mod(Lexer &l)
 void	Parser::Assert(Lexer &l)
 {
 	if (this->stack.size() < 1)
-		throw StackToSmall();
+		throw Exceptions::StackToSmall();
 	IOperand const *v = l.getValue();
 	auto v1 = std::stod(v->toString());
 	auto v2 = std::stod(this->stack.back()->toString());
 	bool ass = v1 == v2;
 	delete v;
 	if (!ass)
-		throw AssertFailed();
+		throw Exceptions::AssertFailed();
 }
 void	Parser::Exit(Lexer &l)
 {
