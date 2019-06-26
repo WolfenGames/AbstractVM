@@ -39,9 +39,9 @@ class Lexer {
 		~Lexer(void);
 		Lexer(const Lexer&);
 		Lexer &operator=(const Lexer&);
-		eCommand getCommand() const;
-		IOperand const *getValue() const;
-		size_t getLine() const;
+		eCommand getCommand(void) const;
+		IOperand const *getValue(void) const;
+		size_t getLine(void) const;
 
 	private:
 		eCommand Command;

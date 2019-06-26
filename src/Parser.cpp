@@ -12,6 +12,7 @@
 
 #include "Parser.hpp"
 #include <iostream>
+#include "Exceptions.hpp"
 
 operation_t Parser::Operations[] = {
 	&Parser::None,
@@ -34,30 +35,30 @@ Parser::Parser(std::istream &stream): stream(stream){}
 Parser &Parser::operator=(const Parser& rhs){if (this != &rhs) *this = rhs; return *this; }
 Parser::~Parser(void)
 {
-	for (auto a : stack)
+	for (auto a : this->stack)
 		delete a;
 }
 
-void	Parser::Push(Lexer &l) { stack.push_back(l.getValue()); }
+void	Parser::Push(Lexer &l) { this->stack.push_back(l.getValue()); }
 void	Parser::Pop(Lexer &l)
 {
 	static_cast<void>(l);
-	if (stack.size() < 1)
-		throw std::exception("Empty Stack :(");
-	delete stack.back();
-	stack.pop_back();
+	if (this->stack.size() < 1)
+		throw EmptyStack();
+	delete this->stack.back();
+	this->stack.pop_back();
 }
 void	Parser::Print(Lexer &l)
 {
 	static_cast<void>(l);
-	if (stack.size() < 1)
-		throw std::exception("Empty Stack :(");
-	std::cout << stack.back()->toString() << std::endl;
+	if (this->stack.size() < 1)
+		throw EmptyStack();
+	std::cout << this->stack.back()->toString() << std::endl;
 }
 void	Parser::Dump(Lexer &l)
 {
 	static_cast<void>(l);
-	for (auto a: stack)
+	for (auto a: this->stack)
 		std::cout << a->toString() << std::endl;
 }
 void	Parser::Add(Lexer &l)
@@ -65,13 +66,13 @@ void	Parser::Add(Lexer &l)
 	static_cast<void>(l);
 	IOperand const *v1;
 	IOperand const *v2;
-	if (stack.size() < 2)
-		throw std::exception("Stack is too small:(");
-	v1 = stack.back();
-	stack.pop_back();
-	v2 = stack.back();
-	stack.pop_back();
-	stack.push_back(*v1 + *v2);
+	if (this->stack.size() < 2)
+		throw StackToSmall();
+	v1 = this->stack.back();
+	this->stack.pop_back();
+	v2 = this->stack.back();
+	this->stack.pop_back();
+	this->stack.push_back(*v1 + *v2);
 	delete v1;
 	delete v2;
 }
@@ -80,13 +81,13 @@ void	Parser::Sub(Lexer &l)
 	static_cast<void>(l);
 	IOperand const *v1;
 	IOperand const *v2;
-	if (stack.size() < 2)
-		throw std::exception("Stack is too small:(");
-	v1 = stack.back();
-	stack.pop_back();
-	v2 = stack.back();
-	stack.pop_back();
-	stack.push_back(*v1 - *v2);
+	if (this->stack.size() < 2)
+		throw StackToSmall();
+	v1 = this->stack.back();
+	this->stack.pop_back();
+	v2 = this->stack.back();
+	this->stack.pop_back();
+	this->stack.push_back(*v1 - *v2);
 	delete v1;
 	delete v2;
 }
@@ -95,13 +96,13 @@ void	Parser::Mul(Lexer &l)
 	static_cast<void>(l);
 	IOperand const *v1;
 	IOperand const *v2;
-	if (stack.size() < 2)
-		throw std::exception("Stack is too small:(");
-	v1 = stack.back();
-	stack.pop_back();
-	v2 = stack.back();
-	stack.pop_back();
-	stack.push_back(*v1 * *v2);
+	if (this->stack.size() < 2)
+		throw StackToSmall();
+	v1 = this->stack.back();
+	this->stack.pop_back();
+	v2 = this->stack.back();
+	this->stack.pop_back();
+	this->stack.push_back(*v1 * *v2);
 	delete v1;
 	delete v2;
 }
@@ -110,13 +111,13 @@ void	Parser::Div(Lexer &l)
 	static_cast<void>(l);
 	IOperand const *v1;
 	IOperand const *v2;
-	if (stack.size() < 2)
-		throw std::exception("Stack is too small:(");
-	v1 = stack.back();
-	stack.pop_back();
-	v2 = stack.back();
-	stack.pop_back();
-	stack.push_back(*v1 / *v2);
+	if (this->stack.size() < 2)
+		throw StackToSmall();
+	v1 = this->stack.back();
+	this->stack.pop_back();
+	v2 = this->stack.back();
+	this->stack.pop_back();
+	this->stack.push_back(*v1 / *v2);
 	delete v1;
 	delete v2;
 }
@@ -125,27 +126,27 @@ void	Parser::Mod(Lexer &l)
 	static_cast<void>(l);
 	IOperand const *v1;
 	IOperand const *v2;
-	if (stack.size() < 2)
-		throw std::exception("Stack is too small:(");
-	v1 = stack.back();
-	stack.pop_back();
-	v2 = stack.back();
-	stack.pop_back();
-	stack.push_back(*v1 % *v2);
+	if (this->stack.size() < 2)
+		throw StackToSmall();
+	v1 = this->stack.back();
+	this->stack.pop_back();
+	v2 = this->stack.back();
+	this->stack.pop_back();
+	this->stack.push_back(*v1 % *v2);
 	delete v1;
 	delete v2;
 }
 void	Parser::Assert(Lexer &l)
 {
-	if (stack.size() < 1)
-		throw std::exception("Stack is too small :(");
+	if (this->stack.size() < 1)
+		throw StackToSmall();
 	IOperand const *v = l.getValue();
 	auto v1 = std::stod(v->toString());
-	auto v2 = std::stod(stack.back()->toString());
+	auto v2 = std::stod(this->stack.back()->toString());
 	bool ass = v1 == v2;
 	delete v;
 	if (!ass)
-		throw std::exception("Assert failed :(");
+		throw AssertFailed();
 }
 void	Parser::Exit(Lexer &l)
 {
@@ -157,6 +158,7 @@ void	Parser::None(Lexer &l)
 }
 void	Parser::Execute(Lexer &l)
 {
+	static_cast<void>(l);
 	size_t line = 0;
 	try
 	{
@@ -173,7 +175,14 @@ void	Parser::Execute(Lexer &l)
 	}
 	instructions.clear();
 }
-void Parser::Run()
+
+void	Parser::Execute(void)
+{
+	Lexer x;
+	Parser::Execute(x);
+}
+
+void	Parser::Run(void)
 {
 	size_t line = 1;
 	error = false;

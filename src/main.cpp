@@ -12,6 +12,9 @@
 
 #include <iostream>
 #include "Factory.hpp"
+#include "Parser.hpp"
+#include "Lexer.hpp"
+#include "Exceptions.hpp"
 
 int		main(void)
 {
@@ -20,7 +23,7 @@ int		main(void)
 	{
 		IOperand const *x = f.getOperator(eOperandType::INT16, "12");
 		IOperand const *y = f.getOperator(eOperandType::INT16, "0");
-		IOperand const *z = *x / *y;
+		IOperand const *z = *x % *y;
 		std::cout << z->toString() << std::endl;
 	}
 	catch(const std::exception& e)

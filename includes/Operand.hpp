@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include "eOperand.hpp"
 #include "Factory.hpp"
 #include <iostream>
@@ -17,7 +18,7 @@
 #include <cmath>
 #include <string>
 #include <functional>
-
+#include "Exceptions.hpp"
 
 template <typename T>
 T mod(T val1, T val2) {	return val1 % val2; }
@@ -46,9 +47,6 @@ inline eOperandType getDataType<float>() { return eOperandType::FLOAT; }
 template <>
 inline eOperandType getDataType<double>() { return eOperandType::DOUBLE; }
 
-#define DivByZero "Tried to Divide by 0 :("
-#define ModByZero "Tried to Mod by 0 :("
-
 template<typename T>
 class Operand: public IOperand
 {
@@ -60,16 +58,25 @@ class Operand: public IOperand
 		Operand(std::string value)
 		{
 			eOperandType t = getDataType<T>();
-			if (t == eOperandType::INT8 || t == eOperandType::INT16 || t == eOperandType::INT32)
+			int32_t temp = std::stoi(value);
+			switch (t)
 			{
-				int32_t temp = std::stoi(value);
-				this->val = static_cast<int32_t>(temp);
-				if (static_cast<int32_t>(this->val) != temp)
-					throw;
-			} else if (t == eOperandType::FLOAT)
-				this->val = std::stof(value);
-			else if (t == eOperandType::DOUBLE)
-				this->val = std::stod(value);
+				default:
+					break;
+				case eOperandType::INT32:
+				case eOperandType::INT16:
+				case eOperandType::INT8:
+					this->val = static_cast<int32_t>(temp);
+					if (static_cast<int32_t>(this->val) != temp)
+						throw OutOfRange((temp > this->val) ? "Overflow :(" : "Underflow :(");
+					break;
+				case eOperandType::FLOAT:
+					this->val = std::stof(value);
+					break;
+				case eOperandType::DOUBLE:
+					this->val = std::stof(value);
+					break;
+			}
 			strVal = std::to_string(this->val);
 		}
 		virtual int		getPrecision(void) const
@@ -128,6 +135,8 @@ class Operand: public IOperand
 		}
 		virtual IOperand const *operator*(IOperand const& rhs) const
 		{
+			if (rhs.getPrecision() > this->getPrecision())
+				return (rhs * *this);
 			std::string v;
 			eOperandType t = rhs.getType() > getType() ? rhs.getType() : getType();
 			Factory		f;
@@ -149,21 +158,20 @@ class Operand: public IOperand
 				case eOperandType::INT16:
 				case eOperandType::INT8:
 					if (op1 == 0)
-						throw std::invalid_argument(DivByZero);
+						throw DivByZero();
 					v = std::to_string(this->val / op1);
 					break;
 				case eOperandType::FLOAT:
 					if (op2 == 0)
-						throw std::invalid_argument(DivByZero);
+						throw DivByZero();
 					v = std::to_string(this->val / op2);
 					break;
 				case eOperandType::DOUBLE:
 					if (op3 == 0)
-						throw std::invalid_argument(DivByZero);
+						throw DivByZero();
 					v = std::to_string(this->val / op3);
 					break;
 				default:
-					v = std::to_string(NULL);
 					break;
 			}
 			return f.getOperator(t, v);
@@ -182,17 +190,17 @@ class Operand: public IOperand
 				case eOperandType::INT16:
 				case eOperandType::INT8:
 					if (op1 == 0)
-						throw std::invalid_argument(ModByZero);
+						throw ModByZero();
 					v = std::to_string(mod<int32_t>(this->val, op1));
 					break;
 				case eOperandType::FLOAT:
 					if (op2 == 0)
-						throw std::invalid_argument(ModByZero);
+						throw ModByZero();
 					v = std::to_string(mod<float>(this->val, op2));
 					break;
 				case eOperandType::DOUBLE:
 					if (op3 == 0)
-						throw std::invalid_argument(ModByZero);
+						throw ModByZero();
 					v = std::to_string(mod<double>(this->val, op3));
 					break;
 				default:
@@ -206,13 +214,7 @@ class Operand: public IOperand
 				*this = rhs;
 			return *this;
 		}
-		virtual std::string const & toString(void) const
-		{
-			// std::stringstream ss;
-			// ss << this->val;
-			// return ss.str();
-			return strVal;
-		}
+		virtual std::string const & toString(void) const { return strVal; }
 	private:
 		std::string strVal;
 		T val;

@@ -22,11 +22,10 @@ typedef void (Parser::* operation_t)(Lexer &);
 
 class Parser
 {
-
 	public:
-		Parser();
+		Parser(void);
 		Parser(std::istream &stream);
-		~Parser();
+		~Parser(void);
 		Parser(Parser const &rhs);
 		Parser &operator=(Parser const &rhs);
 
@@ -43,8 +42,8 @@ class Parser
 		void None(Lexer &l);
 		void Mod(Lexer &l);
 		void Execute(Lexer &l);
-		void Run();
-		void Execute();
+		void Execute(void);
+		void Run(void);
 	
 	private:
 		static operation_t Operations[];
