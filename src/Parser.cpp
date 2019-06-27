@@ -159,6 +159,10 @@ void	Parser::None(Lexer &l)
 void	Parser::Execute(Lexer &l)
 {
 	static_cast<void>(l);
+}
+
+void	Parser::Execute(void)
+{
 	size_t line = 0;
 	try
 	{
@@ -173,13 +177,8 @@ void	Parser::Execute(Lexer &l)
 	{
 		std::cerr << "line" << line << ":: " << e.what() << '\n';
 	}
-	instructions.clear();
-}
-
-void	Parser::Execute(void)
-{
-	Lexer x;
-	Parser::Execute(x);
+	if (instructions.size() > 0)
+		instructions.clear();
 }
 
 void	Parser::Run(void)
@@ -202,7 +201,10 @@ void	Parser::Run(void)
 				return;
 			}
 			if (instructions.back().getCommand() == eCommand::RUN)
+			{
+				instructions.pop_back();
 				Execute();
+			}
 		}
 		catch(const std::exception& e)
 		{
@@ -212,5 +214,5 @@ void	Parser::Run(void)
 		}
 		line++;
 	}
-	std::cerr << "line " << line << ": " << "No exit command" << "\n";
+	std::cerr << "line " << line << ": " << "No exit strat Boss :(" << "\n";
 }

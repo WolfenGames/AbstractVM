@@ -45,7 +45,6 @@ class Lexer {
 
 	private:
 		eCommand Command;
-		mutable size_t index;
 		size_t line;
 		IOperand const *val;
 };
