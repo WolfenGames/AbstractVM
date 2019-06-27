@@ -58,8 +58,9 @@ void	Parser::Print(Lexer &l)
 void	Parser::Dump(Lexer &l)
 {
 	static_cast<void>(l);
-	for (auto a: this->stack)
-		std::cout << a->toString() << std::endl;
+	for (std::vector<IOperand const *>::iterator i = this->stack.end() - 1; i != this->stack.begin(); i--)
+		std::cout << (*i)->toString() << std::endl;
+	std::cout << (*this->stack.begin())->toString() << std::endl;
 }
 void	Parser::Add(Lexer &l)
 {
